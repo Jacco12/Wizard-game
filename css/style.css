@@ -104,6 +104,14 @@ section {
     width: 130px;
 }
 
+.ice-gif {
+    position: absolute;
+    top: 30%;
+    left: 10%;
+    width: 400px;
+}
+
+
 
 
 
@@ -119,9 +127,9 @@ section {
     display: none;
 }
 
-/* .toggle-spell {
+.toggle-ice {
     display: none;
-}  */
+} 
 
 
 
@@ -216,7 +224,7 @@ section {
     font-size: 50px;
     position: absolute;
     bottom: 47%;
-    right: 26%;
+    left: 46%;
     transform: translate(-50%, -50%);
 }
 

@@ -2,62 +2,86 @@
 var enemyHealth = 100;
 var playerHealth = 100;
 
+
 // Player
-var hpText = document.querySelector('.hptext')
-var hpBar = document.querySelector('.health-bar-inside2')
+var hpText = document.querySelector('.hptext');
+var hpBar = document.querySelector('.health-bar-inside2');
 
 // spells
 var iceSpell = document.querySelector('.ice-spell');
 var earthSpell = document.querySelector('.earth-spell');
 var fireSpell = document.querySelector('.fire-spell');
 var airSpell = document.querySelector('.air-spell');
-var allSpells = document.querySelector('.spell');
 
 // Enemy stats
 var enemyHpText = document.querySelector('.enemy-hptext');
 var enemyHpBar = document.querySelector('.health-bar-inside');
-var hansName = document.querySelector('.enemy-name');
 
 var hansCharacter = document.querySelector('.enemy-wizard-character');
-var playerCharacter = document.querySelector('.player-wizard-character')
+var playerCharacter = document.querySelector('.player-wizard-character');
 
 var attackSpellStatus = false;
 
-const playersAttacksElement = document.querySelector('.players-attacks');
+var playersAttacksElement = document.querySelector('.players-attacks');
 
 var fireballGif = document.querySelector('.toggle-fireball');
 var tornadoGif = document.querySelector('.toggle-tornado');
 var rockGif = document.querySelector('.toggle-rock');
+var iceGif = document.querySelector('.toggle-ice');
+
+// Sound effects
+var audio1 = new Audio('sound/fireball-effect.wav');
+var audio2 = new Audio('sound/rock-effect.wav');
+var audio3 = new Audio('sound/tornado-effect.mp3');
+var audio4 = new Audio('sound/ice-effect.mp4');
+var damageAudio = new Audio('sound/enemy-getting-damaged.mp3');
+var backgroundSong = new Audio('sound/background-song.mp3');
 
 
-
-
-// var iceIsAttacking = false;
-
-
-
-
-// Functions for attacking
-iceSpell.addEventListener('click', (e) => {
-    enemyhpDown();
-});
 
 
 
 // --------------------------Ice spell attack---------------------------
+var iceIsAttacking = false;
+
+iceSpell.addEventListener('click', (e) => {
+    enemyhpDown();
+})
+
 function enemyhpDown() {
     if (attackSpellStatus === true) {
         return;
     }
- 
+
+    if (!iceIsAttacking) {
+        iceGif.classList.remove('toggle-ice');
+        iceGif.classList.add('spell_animation');
+        iceIsAttacking = true;
+    }
+
+    setTimeout(() => {
+        iceIsAttacking = false;
+    }, 2000)
+
+    backgroundSong.play();
+    backgroundSong.loop = true;
+    audio4.play()
     playersAttacksElement.style.opacity = 0;
     attackSpellStatus = true;
     playerCharacter.src = './images/player-wizard gif.gif';
 
+    setTimeout ( () => {
+        hansCharacter.src = './images/Enemy-wizard-attacked.gif';
+        damageAudio.play();
+    }, 1000)
 
     setTimeout(() => {
         playerCharacter.src = './images/player-wizard.png';
     }, 400)
+
+    setTimeout ( () => {
+        hansCharacter.src = './images/Enemy wizard.png';
+    }, 1450)
 
 
     enemyHealth -= Math.floor(Math.random() * (20 - 15 + 1)) + 15;;
@@ -69,46 +93,44 @@ function enemyhpDown() {
         enemyHpText.textContent = 'HP 0/100';
         enemyHpBar.style.width = '0%';
         hansCharacter.src = './images/Rip-stone.png';
-        setTimeout ( ()=> {
+        setTimeout(() => {
             window.location.href = 'Victory.html';
-        },500)
+        }, 1000)
     }
 
-    setTimeout ( () => {
+    setTimeout(() => {
         playerHealth -= Math.floor(Math.random() * (35 - 5 + 1)) + 5;
         hpBar.style.width = playerHealth + "%";
         hpText.textContent = 'HP ' + playerHealth + "/100";
+
         if (playerHealth <= 0) {
             hpText.textContent = "HP 0/100";
             hpBar.style.width = '0%';
             playerCharacter.src = './images/Rip-stone.png';
-            window.location.href = 'Defeat.html';
+            setTimeout ( () => {
+                window.location.href = 'Defeat.html';
+            }, 1000)
         }
     }, 1500)
 
 
-    setTimeout ( () => {
+
+    setTimeout(() => {
         playersAttacksElement.style.opacity = 1;
         attackSpellStatus = false;
     }, 2000)
 
+    setTimeout(() => {
+        iceGif.classList.add('toggle-ice');
+    }, 1000);
+
 };
 
-
+// --------------------Earth spell attack-----------------------------
 var rockIsAttacking = false;
 
-// --------------------Earth spell attack-----------------------------
 earthSpell.addEventListener('click', (e) => {
     enemyhpDown2();
-
-    if (!rockIsAttacking) {
-        rockGif.classList.remove('toggle-rock');
-        rockGif.classList.add('spell_animation');
-        rockIsAttacking = true;
-    }
-    setTimeout (() => {
-        rockIsAttacking = false;
-    }, 2000)
 })
 
 function enemyhpDown2() {
@@ -117,14 +139,38 @@ function enemyhpDown2() {
         return;
     }
 
+
+    if (!rockIsAttacking) {
+        rockGif.classList.remove('toggle-rock');
+        rockGif.classList.add('spell_animation');
+        rockIsAttacking = true;
+    }
+
+    setTimeout(() => {
+        rockIsAttacking = false;
+    }, 2000)
+
+    backgroundSong.play();
+    backgroundSong.loop = true;
+    audio2.play();
     playersAttacksElement.style.opacity = 0;
     attackSpellStatus = true;
     playerCharacter.src = './images/player-wizard gif.gif';
+
+    setTimeout ( () => {
+        hansCharacter.src = './images/Enemy-wizard-attacked.gif';
+        damageAudio.play();
+    }, 1000)
 
 
     setTimeout(() => {
         playerCharacter.src = './images/player-wizard.png';
     }, 400)
+
+
+    setTimeout ( () => {
+        hansCharacter.src = './images/Enemy wizard.png';
+    }, 1450)
 
 
     enemyHealth -= Math.floor(Math.random() * (30 - 5 + 1)) + 5;;
@@ -136,12 +182,12 @@ function enemyhpDown2() {
         enemyHpText.textContent = 'HP 0/100';
         enemyHpBar.style.width = '0%';
         hansCharacter.src = './images/Rip-stone.png';
-        setTimeout ( ()=> {
+        setTimeout(() => {
             window.location.href = 'Victory.html';
-        },500)
+        }, 1000)
     }
 
-    setTimeout ( () => {
+    setTimeout(() => {
         playerHealth -= Math.floor(Math.random() * (35 - 5 + 1)) + 5;
         hpBar.style.width = playerHealth + "%";
         hpText.textContent = 'HP ' + playerHealth + "/100";
@@ -149,17 +195,19 @@ function enemyhpDown2() {
             hpText.textContent = "HP 0/100";
             hpBar.style.width = '0%';
             playerCharacter.src = './images/Rip-stone.png';
-            window.location.href = 'Defeat.html';
+            setTimeout ( () => {
+                window.location.href = 'Defeat.html';
+            }, 1000)
         }
     }, 1000)
 
 
-    setTimeout ( () => {
+    setTimeout(() => {
         playersAttacksElement.style.opacity = 1;
         attackSpellStatus = false;
     }, 2000)
 
-    setTimeout (()=> {
+    setTimeout(() => {
         rockGif.classList.add('toggle-rock');
     }, 1000)
 
@@ -172,15 +220,6 @@ var fireballIsAttacking = false;
 
 fireSpell.addEventListener('click', (e) => {
     enemyhpDown3();
-
-    if (!fireballIsAttacking) {
-        fireballGif.classList.remove('toggle-fireball');
-        fireballGif.classList.add('spell_animation');
-        fireballIsAttacking = true;
-    }
-    setTimeout (() => {
-        fireballIsAttacking = false;
-    }, 2000)
 });
 
 
@@ -191,13 +230,36 @@ function enemyhpDown3() {
         return;
     }
 
+    if (!fireballIsAttacking) {
+        fireballGif.classList.remove('toggle-fireball');
+        fireballGif.classList.add('spell_animation');
+        fireballIsAttacking = true;
+    }
+
+    setTimeout(() => {
+        fireballIsAttacking = false;
+    }, 2000)
+
+    backgroundSong.play();
+    backgroundSong.loop = true;
+    audio1.play();
     playersAttacksElement.style.opacity = 0;
     attackSpellStatus = true;
     playerCharacter.src = './images/player-wizard gif.gif';
 
+    setTimeout ( () => {
+        hansCharacter.src = './images/Enemy-wizard-attacked.gif';
+        damageAudio.play();
+    }, 1000)
+
     setTimeout(() => {
         playerCharacter.src = './images/player-wizard.png';
     }, 400)
+
+
+    setTimeout ( () => {
+        hansCharacter.src = './images/Enemy wizard.png';
+    }, 1450)
 
     enemyHealth -= Math.floor(Math.random() * (25 - 10 + 1)) + 10;;
     enemyHpBar.style.width = enemyHealth + "%";
@@ -208,13 +270,13 @@ function enemyhpDown3() {
         enemyHpText.textContent = 'HP 0/100';
         enemyHpBar.style.width = '0%';
         hansCharacter.src = './images/Rip-stone.png';
-        setTimeout ( ()=> {
+        setTimeout(() => {
             window.location.href = 'Victory.html';
-        },500)
+        }, 1000)
     }
 
 
-    setTimeout ( () => {
+    setTimeout(() => {
         playerHealth -= Math.floor(Math.random() * (35 - 5 + 1)) + 5;
         hpBar.style.width = playerHealth + "%";
         hpText.textContent = 'HP ' + playerHealth + "/100";
@@ -222,18 +284,20 @@ function enemyhpDown3() {
             hpText.textContent = "HP 0/100";
             hpBar.style.width = '0%';
             playerCharacter.src = './images/Rip-stone.png';
-            window.location.href = 'Defeat.html';
+            setTimeout ( () => {
+                window.location.href = 'Defeat.html';
+            }, 1000)
         }
     }, 1000)
 
 
-    setTimeout ( () => {
+    setTimeout(() => {
         playersAttacksElement.style.opacity = 1;
         attackSpellStatus = false;
     }, 2000)
 
 
-    setTimeout (()=> {
+    setTimeout(() => {
         fireballGif.classList.add('toggle-fireball');
     }, 1000)
 
@@ -248,16 +312,6 @@ var tornadoIsAttacking = false;
 
 airSpell.addEventListener('click', (e) => {
     enemyhpDown4();
-
-    if (!tornadoIsAttacking) {
-        tornadoGif.classList.remove('toggle-tornado');
-        tornadoGif.classList.add('spell_animation');
-        tornadoIsAttacking = true;
-    }
-    setTimeout (() => {
-        tornadoIsAttacking = false;
-    }, 2000)
-
 })
 
 function enemyhpDown4() {
@@ -266,30 +320,54 @@ function enemyhpDown4() {
         return;
     }
 
+    if (!tornadoIsAttacking) {
+        tornadoGif.classList.remove('toggle-tornado');
+        tornadoGif.classList.add('spell_animation');
+        tornadoIsAttacking = true;
+    }
+
+    setTimeout(() => {
+        tornadoIsAttacking = false;
+    }, 2000)
+
+    backgroundSong.play();
+    backgroundSong.loop = true;
+    audio3.play();
     playersAttacksElement.style.opacity = 0;
     attackSpellStatus = true;
     playerCharacter.src = './images/player-wizard gif.gif';
+
+    setTimeout ( () => {
+        hansCharacter.src = './images/Enemy-wizard-attacked.gif';
+        damageAudio.play();
+    }, 1000)
 
     setTimeout(() => {
         playerCharacter.src = './images/player-wizard.png';
     }, 400)
 
 
-    enemyHealth -= Math.floor(Math.random() * (30 - 5 + 1)) + 5;;
+    setTimeout ( () => {
+        hansCharacter.src = './images/Enemy wizard.png';
+    }, 1450)
+
+
+    enemyHealth -= Math.floor(Math.random() * (35 - 5 + 1)) + 5;;
     enemyHpBar.style.width = enemyHealth + "%";
     enemyHpText.textContent = "HP " + enemyHealth + "/100";
+
 
 
     if (enemyHealth <= 0) {
         enemyHpText.textContent = 'HP 0/100';
         enemyHpBar.style.width = '0%';
         hansCharacter.src = './images/Rip-stone.png';
-        setTimeout ( ()=> {
+        setTimeout(() => {
             window.location.href = 'Victory.html';
-        },500)
+        }, 1000)
     }
 
-    setTimeout ( () => {
+    setTimeout(() => {
         playerHealth -= Math.floor(Math.random() * (35 - 5 + 1)) + 5;
         hpBar.style.width = playerHealth + "%";
         hpText.textContent = 'HP ' + playerHealth + "/100";
@@ -297,23 +375,23 @@ function enemyhpDown4() {
             hpText.textContent = "HP 0/100";
             hpBar.style.width = '0%';
             playerCharacter.src = './images/Rip-stone.png';
-            setTimeout (() => {
+            setTimeout(() => {
                 window.location.href = 'Defeat.html';
-            }, 500)
+            }, 1000)
         }
-        
+
     }, 1000)
 
 
 
-    setTimeout ( () => {
+    setTimeout(() => {
         playersAttacksElement.style.opacity = 1;
         attackSpellStatus = false;
     }, 2000)
 
 
 
-    setTimeout (()=> {
+    setTimeout(() => {
         tornadoGif.classList.add('toggle-tornado');
     }, 1000)
 
@@ -322,9 +400,6 @@ function enemyhpDown4() {
 
 
 
-// setTimeout(() => {
- 
-// }, 500);
 
 
 
@@ -403,3 +478,19 @@ function enemyhpDown4() {
 // randomNummer = Math.floor(randomNummer);
 
 // pElement.textContent = namen[randomNummer];
+
+
+
+// Bronnen----------------------------------------------------------------------------
+
+// Fireball gif: https://www.pinterest.com/pin/883690758107031330/
+
+// Icespell gif: https://www.pinterest.com/pin/213498838579786968/
+
+// Rock gif: https://tenor.com/en-GB/view/big-rock-01-gif-18235152
+
+// Tornado gif: https://gfycat.com/fastwindycivet
+
+// player wizard character image: https://www.pinterest.com/pin/141722719515913843/
+
+// Enemy wizard character image: https://www.istockphoto.com/br/vetor/personagem-da-morte-de-pixel-art-personagem-de-conto-de-fadas-gm1267018345-371608891
